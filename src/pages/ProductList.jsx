@@ -3,7 +3,7 @@ import Card from '../components/Card'
 export default function ProductList({products, searchProducts, onSort}){
 
   return(
-    <div className="grow flex flex-col max-w-5xl lg:min-w-5xl mx-auto my-6 bg-white rounded-lg p-6">
+    <div className="grow flex flex-col max-w-6xl lg:min-w-5xl mx-auto my-6 bg-white rounded-lg p-6">
       {/* <div className="bg-white rounded-lg p-6"> */}
         <div className="flex justify-between mb-6 gap-4">
           <input className='border bg-gray-100 w-1/2 md:w-2/3 px-4' placeholder="Find your favourite" onChange={(e) =>searchProducts(e.target.value)}/>

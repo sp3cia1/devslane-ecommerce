@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 
 import Header from './components/Header'
-import Container from './components/Container'
+import ProductList from './pages/ProductList'
 import Footer from './components/Footer'
-import ProductDetail from './components/ProductDetail';
+
+import { Routes, Route } from "react-router";
+import ProductDetail from "./pages/ProductDetail";
 
 function App() {
   const [search, setSearch] = useState('')
@@ -104,8 +106,10 @@ function App() {
   return (
     <div className="bg-gray-100 flex flex-col min-h-screen">
        <Header/>
-        <Container products={sortedProducts} searchProducts={searchProducts} onSort={handleSort} />
-       {/* <ProductDetail/> */}
+          <Routes>
+            <Route index element={<ProductList products={sortedProducts} searchProducts={searchProducts} onSort={handleSort} />} />
+            <Route path="product/1" element={<ProductDetail/>}/>
+          </Routes>
        <Footer/> 
     </div>
   );

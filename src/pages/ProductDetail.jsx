@@ -1,6 +1,15 @@
+import { Link } from "react-router";
+import { FaArrowLeft } from "react-icons/fa";
+
 export default function ProductDetail() {
   return(
     <div className="p-4 md:flex grow max-w-5xl mx-auto">
+      <div className="w-full mb-4 md:hidden">
+        <Link to="/" className="flex items-center space-x-2 text-blue-600 hover:text-blue-800">
+          <FaArrowLeft />
+          <span>Back to Products</span>
+        </Link>
+      </div>
       <div className ="w-full h-1/2 md:w-1/2 p-4">
         <img alt="mug image"
              src="https://codeyogi.io/coffee-mug.jpeg"
@@ -8,6 +17,12 @@ export default function ProductDetail() {
         />
       </div>
       <div className="md:w-1/2 p-4">
+        <div className="hidden md:block mb-4">
+          <Link to="/" className="flex items-center space-x-2 text-blue-600 hover:text-blue-800">
+            <FaArrowLeft />
+            <span>Back to Products</span>
+          </Link>
+        </div>
         <p className="text-4xl">
           Black Printed Coffee Mug
         </p>

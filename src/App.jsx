@@ -1,82 +1,18 @@
 import React, { useState } from "react";
-
 import Header from './components/Header'
 import ProductList from './pages/ProductList'
 import Footer from './components/Footer'
 
 import { Routes, Route } from "react-router";
 import ProductDetail from "./pages/ProductDetail";
+import CartPage from "./pages/CartPage";
+import { products } from './dummyData'
 
-function App() {
+
+export default function App() {
+
   const [search, setSearch] = useState('')
   const [sortBy, setSortBy] = useState('default')
-
-  const products = [
-    {
-      title: "Black Printed Coffee Mug",
-      price: 15.00,
-      category: "Mugs",
-      imageUrl: "https://codeyogi.io/coffee-mug.jpeg",
-      sale: false
-    },
-    {
-      title: "Green Printed Tshirt",
-      price: 34.00,
-      category: "Tshirts",
-      imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnZ0PG7B58nDVDGJLFaoQnZMmMoyqYOs7Uqw&s",
-      sale: false
-    },
-    {
-      title: "Father's Day Coffee Mug",
-      price: 19.00,
-      category: "Mugs", 
-      imageUrl: "https://codeyogi.io/coffee-mug.jpeg",
-      sale: false
-    },
-
-    {
-      title: "Personalised Mug",
-      price: 15.00,
-      category: "Mugs",
-      imageUrl: "https://codeyogi.io/coffee-mug.jpeg", 
-      sale: false
-    },
-    {
-      title: "Printed Brown Tshirt",
-      price: 25.00,
-      category: "Tshirts",
-      imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnZ0PG7B58nDVDGJLFaoQnZMmMoyqYOs7Uqw&s",
-      sale: true
-    },
-    {
-      title: "Printed Dark Blue Tshirt",
-      price: 34.00,
-      category: "Tshirts",
-      imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnZ0PG7B58nDVDGJLFaoQnZMmMoyqYOs7Uqw&s",
-      sale: false
-    },
-    {
-      title: "Printed Green Tshirt",
-      price: 28.00,
-      category: "Tshirts",
-      imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnZ0PG7B58nDVDGJLFaoQnZMmMoyqYOs7Uqw&s",
-      sale: true
-    },
-    {
-      title: "Printed Tshirt Coffee Black Color",
-      price: 25.00,
-      category: "Tshirts",
-      imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnZ0PG7B58nDVDGJLFaoQnZMmMoyqYOs7Uqw&s",
-      sale: true
-    },
-    {
-      title: "Typography Teal Printed Tshirt",
-      price: 32.00,
-      category: "Tshirts",
-      imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnZ0PG7B58nDVDGJLFaoQnZMmMoyqYOs7Uqw&s",
-      sale: true
-    }
-  ]
 
   const filteredProducts = products.filter((product) => product.title.toLowerCase().includes(search.toLowerCase()))
 
@@ -106,13 +42,12 @@ function App() {
   return (
     <div className="bg-gray-100 flex flex-col min-h-screen">
        <Header/>
-          <Routes>
-            <Route index element={<ProductList products={sortedProducts} searchProducts={searchProducts} onSort={handleSort} />} />
-            <Route path="product/1" element={<ProductDetail/>}/>
-          </Routes>
+       <Routes>
+          <Route index element={<ProductList products={sortedProducts} searchProducts={searchProducts} onSort={handleSort} />} />
+          <Route path="product/:sku" element={<ProductDetail/>}/>
+          <Route path="cart" element={<CartPage/>}/>
+       </Routes>
        <Footer/> 
     </div>
   );
 }
-
-export default App;

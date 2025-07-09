@@ -1,10 +1,14 @@
 import Card from '../components/Card'
+import Loading from '../components/Loading'
 
-export default function ProductList({products, searchProducts, onSort}){
+export default function ProductList({products, searchProducts, onSort, loading}){
+
+  if (loading) {
+    return <Loading />
+  }
 
   return(
     <div className="grow flex flex-col max-w-6xl lg:min-w-5xl mx-auto my-6 bg-white rounded-lg p-6">
-      {/* <div className="bg-white rounded-lg p-6"> */}
         <div className="flex justify-between mb-6 gap-4">
           <input className='border bg-gray-100 w-1/2 md:w-2/3 px-4' placeholder="Find your favourite" onChange={(e) =>searchProducts(e.target.value)}/>
 
@@ -18,8 +22,8 @@ export default function ProductList({products, searchProducts, onSort}){
         </div>
         
         <div className="flex-grow grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((product, index) => 
-              <Card key={index} product={product}/>
+          {products.map((product) => 
+              <Card key={product.id} product={product}/>
           )}
         </div>
 
@@ -30,7 +34,6 @@ export default function ProductList({products, searchProducts, onSort}){
             <button className="w-8 h-8 border border-gray-300 text-gray-700 rounded text-sm font-medium hover:bg-gray-50">→</button>
           </div>
         </div>
-      {/* </div> */}
     </div>
   )
 }

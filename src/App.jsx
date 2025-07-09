@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from './components/Header'
 import ProductList from './pages/ProductList'
 import Footer from './components/Footer'
@@ -6,13 +6,31 @@ import Footer from './components/Footer'
 import { Routes, Route } from "react-router";
 import ProductDetail from "./pages/ProductDetail";
 import CartPage from "./pages/CartPage";
-import { products } from './dummyData'
+import { getProducts } from './api';
 
 
 export default function App() {
 
   const [search, setSearch] = useState('')
   const [sortBy, setSortBy] = useState('default')
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true)
+        const data = await getProducts()
+        setProducts(data.products)
+      } catch (error) {
+        console.error('Failed to fetch products:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProducts()
+  }, [])
 
   const filteredProducts = products.filter((product) => product.title.toLowerCase().includes(search.toLowerCase()))
 
@@ -43,8 +61,8 @@ export default function App() {
     <div className="bg-gray-100 flex flex-col min-h-screen">
        <Header/>
        <Routes>
-          <Route index element={<ProductList products={sortedProducts} searchProducts={searchProducts} onSort={handleSort} />} />
-          <Route path="product/:sku" element={<ProductDetail/>}/>
+          <Route index element={<ProductList products={sortedProducts} searchProducts={searchProducts} onSort={handleSort} loading={loading} />} />
+          <Route path="product/:id" element={<ProductDetail/>}/>
           <Route path="cart" element={<CartPage/>}/>
        </Routes>
        <Footer/> 

@@ -8,7 +8,7 @@ export default function Card({product}){
       
       <div className="relative mb-4">
         <img alt="product image"
-             src={product.imageUrl}
+             src={product.thumbnail}
              className="w-full rounded-md"
         />
         {product.sale && (<p className="bg-red-500 rounded-full absolute right-[-10px] top-[-20px] py-4 px-2 text-xl text-white">
@@ -34,7 +34,7 @@ export default function Card({product}){
         </div>
         <div className="flex justify-between items-center">
           <p className="text-lg font-semibold text-gray-900">$ {product.price}</p>
-          <Link to="/product/1" className="rounded-md bg-blue-500 text-white px-4 py-2">View Details</Link>
+          <Link to={`/product/${product.id}`} className="rounded-md bg-blue-500 text-white px-4 py-2">View Details</Link>
         </div>
       </div>
     </div>

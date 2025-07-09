@@ -33,7 +33,7 @@ export default function ProductDetail() {
     return (
       <div className="grow flex flex-col max-w-6xl lg:min-w-5xl mx-auto my-6 bg-white rounded-lg p-6">
         <div className="flex justify-center items-center h-64">
-          <div className="text-xl text-red-600">Product not found</div>
+          <div className="text-xl text-primary-dark">Product not found</div>
         </div>
       </div>
     );

@@ -29,7 +29,7 @@ export default function ProductList({products, searchProducts, onSort, loading})
 
         <div className="flex justify-center mt-8">
           <div className="flex items-center space-x-2">
-            <button className="w-8 h-8 bg-red-500 text-white rounded text-sm font-medium">1</button>
+            <button className="w-8 h-8 bg-primary text-white rounded text-sm font-medium">1</button>
             <button className="w-8 h-8 border border-gray-300 text-gray-700 rounded text-sm font-medium hover:bg-gray-50">2</button>
             <button className="w-8 h-8 border border-gray-300 text-gray-700 rounded text-sm font-medium hover:bg-gray-50">→</button>
           </div>

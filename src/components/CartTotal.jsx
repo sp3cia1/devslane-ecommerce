@@ -18,7 +18,7 @@ export default function CartTotal() {
 
         </div>
         <div className="p-4">
-          <button className="w-full p-3 text-lg text-white bg-red-500 rounded-sm cursor-pointer hover:bg-red-600">Proceed To Checkout</button>
+          <button className="w-full p-3 text-lg text-white bg-primary rounded-sm cursor-pointer hover:bg-primary-dark">Proceed To Checkout</button>
         </div>
       </div>
   )

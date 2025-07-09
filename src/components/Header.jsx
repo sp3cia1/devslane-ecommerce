@@ -10,7 +10,7 @@ export default function Header(){
              alt="Amazon Logo"
         />
       </Link>
-      <Link to="/cart" className="text-gray-700 hover:text-blue-600 transition-colors">
+      <Link to="/cart" className="text-primary hover:text-blue-600 transition-colors">
         <FaShoppingCart className="md:text-4xl text-2xl" />
       </Link>
     </div>

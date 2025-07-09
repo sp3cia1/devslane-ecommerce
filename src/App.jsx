@@ -58,7 +58,7 @@ export default function App() {
   }
 
   return (
-    <div className="bg-gray-100 flex flex-col min-h-screen">
+    <div className="bg-[rgb(244,245,246)] flex flex-col min-h-screen">
        <Header/>
        <Routes>
           <Route index element={<ProductList products={sortedProducts} searchProducts={searchProducts} onSort={handleSort} loading={loading} />} />

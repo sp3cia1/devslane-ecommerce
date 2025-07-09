@@ -11,7 +11,7 @@ export default function Card({product}){
              src={product.thumbnail}
              className="w-full rounded-md"
         />
-        {product.sale && (<p className="bg-red-500 rounded-full absolute right-[-10px] top-[-20px] py-4 px-2 text-xl text-white">
+        {product.sale && (<p className="bg-primary rounded-full absolute right-[-10px] top-[-20px] py-4 px-2 text-xl text-white">
         Sale!
         </p>)}
       </div>

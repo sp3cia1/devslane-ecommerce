@@ -23,10 +23,10 @@ export default function CartList(){
       <div className="flex border-t border-gray-300 px-4 py-2 justify-between bg-white items-center">
         <div className="flex">
           <input className="border px-2 py-1 w-1/2 mr-3" placeholder="Coupon Code"/>
-          <button className="px-8 py-1 text-white bg-red-500 rounded-sm w-1/2 cursor-pointer hover:bg-red-600">APPLY COUPON</button>
+          <button className="px-8 py-1 text-white bg-primary rounded-sm w-1/2 cursor-pointer hover:bg-primary-dark">APPLY COUPON</button>
         </div>
 
-        <button className="px-8 py-1 text-white bg-red-500 rounded-sm cursor-pointer hover:bg-red-600">UPDATE CART</button>
+        <button className="px-8 py-1 text-white bg-primary rounded-sm cursor-pointer hover:bg-primary-dark">UPDATE CART</button>
       </div>
       
     </div>

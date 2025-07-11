@@ -15,6 +15,7 @@ export default function App() {
   const [sortBy, setSortBy] = useState('default')
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
+  const [cart, setCart] = useState({})
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -57,12 +58,21 @@ export default function App() {
     setSortBy(value)
   }
 
+  function handleAddToCart(productId, count){
+    const oldCount = cart[productId] || 0;
+    setCart({...cart, [productId]: oldCount + count});
+  }
+
+  const totalCount = Object.keys(cart).reduce((prev, current) => {
+    return prev + cart[current];
+  }, 0)
+
   return (
     <div className="bg-[rgb(244,245,246)] flex flex-col min-h-screen">
-       <Header/>
+       <Header productCount={totalCount}/>
        <Routes>
           <Route index element={<ProductList products={sortedProducts} searchProducts={searchProducts} onSort={handleSort} loading={loading} />} />
-          <Route path="product/:id" element={<ProductDetail/>}/>
+          <Route path="product/:id" element={<ProductDetail handleAddToCart={handleAddToCart}/>}/>
           <Route path="cart" element={<CartPage/>}/>
        </Routes>
        <Footer/> 

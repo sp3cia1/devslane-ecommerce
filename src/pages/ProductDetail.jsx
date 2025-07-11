@@ -4,10 +4,11 @@ import { useState, useEffect } from "react";
 import { getProductById } from "../api";
 import Loading from "../components/Loading";
 
-export default function ProductDetail() {
+export default function ProductDetail({handleAddToCart}) {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -15,8 +16,10 @@ export default function ProductDetail() {
         setLoading(true);
         const data = await getProductById(id);
         setProduct(data);
+        setQuantity(1);
       } catch (error) {
         console.error('Failed to fetch product:', error);
+        setProduct(null)
       } finally {
         setLoading(false);
       }
@@ -24,6 +27,11 @@ export default function ProductDetail() {
 
     fetchProduct();
   }, [id]);
+
+  const handleQuantityChange = (event) => {
+    const value = parseInt(event.target.value) || 1;
+    setQuantity(value);
+  }
 
   if (loading) {
     return <Loading />;
@@ -71,10 +79,14 @@ export default function ProductDetail() {
         </p>
         <div className="py-8">
           <input type="number"
-            value = '1'
+            value = {quantity}
+            min="1"
             className="border w-16 px-1 border-gray-400 py-1"
+            onChange={handleQuantityChange}
           />
-          <button className="mx-1 rounded bg-orange-600 px-8 py-1 text-white cursor-pointer hover:bg-orange-700">
+          <button className="mx-1 rounded bg-primary px-8 py-1 text-white cursor-pointer hover:bg-primary-dark"
+            onClick={() => handleAddToCart(parseInt(id), quantity)}
+          >
             Add To Cart
           </button>
         </div>

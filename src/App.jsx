@@ -15,7 +15,14 @@ export default function App() {
   const [sortBy, setSortBy] = useState('default')
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
-  const [cart, setCart] = useState({})
+  const [cart, setCart] = useState(() => {
+    const savedCart = localStorage.getItem('cart');
+    return savedCart ? JSON.parse(savedCart) : {};
+  })
+
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -73,7 +80,7 @@ export default function App() {
        <Routes>
           <Route index element={<ProductList products={sortedProducts} searchProducts={searchProducts} onSort={handleSort} loading={loading} />} />
           <Route path="product/:id" element={<ProductDetail handleAddToCart={handleAddToCart}/>}/>
-          <Route path="cart" element={<CartPage/>}/>
+          <Route path="cart" element={<CartPage cart={cart}/>}/>
        </Routes>
        <Footer/> 
     </div>

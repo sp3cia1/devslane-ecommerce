@@ -1,6 +1,6 @@
 import CartRow from "./CartRow"
 
-export default function CartList(){
+export default function CartList({cartProducts}){
   return(
     <div className="border border-gray-300">
       <div className="flex bg-gray-400 border-b border-gray-300 py-4">
@@ -15,8 +15,12 @@ export default function CartList(){
       </div>
 
       <div>
-        <CartRow/>
-        <CartRow/>
+        {cartProducts.map(product => (
+          <CartRow 
+            key={product.id} 
+            product={product}
+          />
+        ))}
       </div>
 
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Header from './components/Header'
 import ProductList from './pages/ProductList'
 import Footer from './components/Footer'
@@ -40,9 +40,12 @@ export default function App() {
     fetchProducts()
   }, [])
 
-  const filteredProducts = products.filter((product) => product.title.toLowerCase().includes(search.toLowerCase()))
+  const filteredProducts = useMemo(() => 
+    products.filter((product) => product.title.toLowerCase().includes(search.toLowerCase())),
+    [products, search]
+  );
 
-  const getSortedProducts = (products, sortBy) => {
+  const getSortedProducts = useCallback((products, sortBy) => {
     switch(sortBy) {
       case 'title':
         return [...products].sort((a, b) => a.title.localeCompare(b.title))
@@ -53,26 +56,32 @@ export default function App() {
       default:
         return products
     }
-  }
+  }, []);
 
-  const sortedProducts = getSortedProducts(filteredProducts, sortBy)
+  const sortedProducts = useMemo(() => 
+    getSortedProducts(filteredProducts, sortBy),
+    [filteredProducts, sortBy, getSortedProducts]
+  );
 
-  function searchProducts(value) {
+  const searchProducts = useCallback((value) => {
     setSearch(value)
-  }
+  }, []);
 
-  function handleSort(value) {
+  const handleSort = useCallback((value) => {
     setSortBy(value)
-  }
+  }, []);
 
-  function handleAddToCart(productId, count){
+  const handleAddToCart = useCallback((productId, count) => {
     const oldCount = cart[productId] || 0;
     setCart({...cart, [productId]: oldCount + count});
-  }
+  }, [cart]);
 
-  const totalCount = Object.keys(cart).reduce((prev, current) => {
-    return prev + cart[current];
-  }, 0)
+  const totalCount = useMemo(() => 
+    Object.keys(cart).reduce((prev, current) => {
+      return prev + cart[current];
+    }, 0),
+    [cart]
+  );
 
   return (
     <div className="bg-[rgb(244,245,246)] flex flex-col min-h-screen">

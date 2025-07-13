@@ -1,44 +1,44 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import CartList from "../components/CartList"
 import CartTotal from "../components/CartTotal"
 import { getProductById } from "../api";
 import Loading from "../components/Loading";
 
 export default function CartPage({cart}) {
-  const [cartProducts, setCartProducts] = useState([]);
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const cartProductsWithQuantity = useMemo(() => 
+    products.map(product => ({
+      id: product.id,
+      title: product.title,
+      thumbnail: product.thumbnail,
+      price: product.price,
+      count: cart[product.id]
+    })),
+    [products, cart]
+  );
 
   useEffect(() => {
     const fetchCartProducts = async () => {
       try {
         setLoading(true);
-        
-        // Get all product IDs from cart
+      
         const productIds = Object.keys(cart);
         
         if (productIds.length === 0) {
-          setCartProducts([]);
+          setProducts([]);
           setLoading(false);
           return;
         }
 
-        // Fetch all products concurrently using Promise.all
         const productPromises = productIds.map(id => getProductById(id));
-        const products = await Promise.all(productPromises);
+        const fetchedProducts = await Promise.all(productPromises);
         
-        // Combine product data with cart quantities
-        const cartProductsWithQuantity = products.map(product => ({
-          id: product.id,
-          title: product.title,
-          thumbnail: product.thumbnail,
-          price: product.price,
-          count: cart[product.id]
-        }));
-        
-        setCartProducts(cartProductsWithQuantity);
+        setProducts(fetchedProducts);
       } catch (error) {
         console.error('Failed to fetch cart products:', error);
-        setCartProducts([]);
+        setProducts([]);
       } finally {
         setLoading(false);
       }
@@ -52,8 +52,8 @@ export default function CartPage({cart}) {
   }
   
   return(
-    <div className="flex-grow mx-16 flex flex-col p-4">
-      <CartList cartProducts={cartProducts}/>
+    <div className="flex-grow mx-8 md:mx-16 flex flex-col px-2 py-4 md:p-4">
+      <CartList cartProducts={cartProductsWithQuantity}/>
       <CartTotal/>
     </div>
   )

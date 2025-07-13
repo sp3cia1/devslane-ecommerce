@@ -1,8 +1,9 @@
 import { Link } from "react-router";
 import { FaStar, FaRegStar } from "react-icons/fa";
+import { memo } from "react";
 
-export default function Card({product}){
-  
+function Card({product}){
+  console.log("rendered")
   return(
     <div className="bg-white rounded-lg shadow-sm p-4 mb-6 ">
       
@@ -40,3 +41,5 @@ export default function Card({product}){
     </div>
   )
 }
+
+export default memo(Card)

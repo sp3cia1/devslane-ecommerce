@@ -1,6 +1,6 @@
 export default function CartTotal() {
   return(
-      <div className="border border-gray-300 mt-8 w-1/2 self-end">
+      <div className="border border-gray-300 mt-8 w-full md:w-1/2 self-end">
         <div className="flex bg-gray-400 border-b border-gray-300 py-4 px-4">
           <p className="w-1/2 text-start font-semibold text-xl">
             Cart Totals

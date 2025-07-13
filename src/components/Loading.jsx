@@ -1,4 +1,6 @@
-export default function Loading() {
+import { memo } from "react";
+
+function Loading() {
   return (
     <div className="grow flex flex-col max-w-6xl lg:min-w-5xl mx-auto my-6 bg-white rounded-lg p-6">
       <div className="flex justify-center items-center h-64">
@@ -7,3 +9,5 @@ export default function Loading() {
     </div>
   )
 }
+
+export default memo(Loading);

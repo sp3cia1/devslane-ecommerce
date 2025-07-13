@@ -53,7 +53,7 @@ export default function ForgotPasswordForm() {
             required
             className="border rounded-md border-white text-white p-4 text-sm w-80 bg-transparent placeholder-gray-300"
           />
-          {touched.email && errors.email && (
+          {touched.email && errors.email && values.email &&(
             <div className="text-red-300 text-sm mt-1">{errors.email}</div>
           )}
         </div>

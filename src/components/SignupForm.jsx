@@ -56,7 +56,7 @@ export default function SignupForm() {
             required
             className="border rounded-md border-white text-white p-4 text-sm w-80 bg-transparent placeholder-gray-300"
           />
-          {touched.fullName && errors.fullName && (
+          {touched.fullName && errors.fullName && values.fullName &&(
             <div className="text-red-300 text-sm mt-1">{errors.fullName}</div>
           )}
         </div>
@@ -76,7 +76,7 @@ export default function SignupForm() {
             required
             className="border rounded-md border-white text-white p-4 text-sm w-80 bg-transparent placeholder-gray-300"
           />
-          {touched.email && errors.email && (
+          {touched.email && errors.email && values.email &&(
             <div className="text-red-300 text-sm mt-1">{errors.email}</div>
           )}
         </div>
@@ -96,7 +96,7 @@ export default function SignupForm() {
             required
             className="border rounded-md border-white text-white p-4 text-sm w-80 bg-transparent placeholder-gray-300"
           />
-          {touched.username && errors.username && (
+          {touched.username && errors.username && values.username &&(
             <div className="text-red-300 text-sm mt-1">{errors.username}</div>
           )}
         </div>
@@ -116,7 +116,7 @@ export default function SignupForm() {
             required
             className="border rounded-md border-white text-white p-4 text-sm w-80 bg-transparent placeholder-gray-300"
           />
-          {touched.password && errors.password && (
+          {touched.password && errors.password && values.password &&(
             <div className="text-red-300 text-sm mt-1">{errors.password}</div>
           )}
         </div>
@@ -136,7 +136,7 @@ export default function SignupForm() {
             required
             className="border rounded-md border-white text-white p-4 text-sm w-80 bg-transparent placeholder-gray-300"
           />
-          {touched.confirmPassword && errors.confirmPassword && (
+          {touched.confirmPassword && errors.confirmPassword && values.confirmPassword &&(
             <div className="text-red-300 text-sm mt-1">{errors.confirmPassword}</div>
           )}
         </div>

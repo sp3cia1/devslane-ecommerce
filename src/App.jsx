@@ -6,6 +6,7 @@ import Footer from './components/Footer'
 import { Routes, Route } from "react-router";
 import ProductDetail from "./pages/ProductDetail";
 import CartPage from "./pages/CartPage";
+import AuthPage from "./pages/AuthPage";
 import { getProducts } from './api';
 
 
@@ -90,6 +91,7 @@ export default function App() {
           <Route index element={<ProductList products={sortedProducts} searchProducts={searchProducts} onSort={handleSort} loading={loading} />} />
           <Route path="product/:id" element={<ProductDetail handleAddToCart={handleAddToCart}/>}/>
           <Route path="cart" element={<CartPage cart={cart}/>}/>
+          <Route path="auth/:authType" element={<AuthPage/>}/>
        </Routes>
        <Footer/> 
     </div>

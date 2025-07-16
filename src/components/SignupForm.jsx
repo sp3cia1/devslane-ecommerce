@@ -1,6 +1,11 @@
-import { useFormik } from "formik";
+import { withFormik } from "formik";
 import { Link } from "react-router";
 import * as Yup from "yup";
+import Input from "./Input";
+
+function signupApi(values) {
+  console.log("Sending Data", values);
+}
 
 const SignupSchema = Yup.object().shape({
   fullName: Yup.string().min(2, "Full name must be at least 2 characters").required("Full name is required"),
@@ -12,133 +17,105 @@ const SignupSchema = Yup.object().shape({
     .required("Please confirm your password"),
 });
 
-export default function SignupForm() {
-  function signupApi(values) {
-    console.log("Sending Data", values);
-  }
+const initialValues = {
+  fullName: "",
+  email: "",
+  username: "",
+  password: "",
+  confirmPassword: "",
+};
 
-  const {
-    handleSubmit,
-    values,
-    handleChange,
-    touched,
-    handleBlur,
-    dirty,
-    errors,
-    isValid
-  } = useFormik({
-    initialValues: {
-      fullName: "",
-      email: "",
-      username: "",
-      password: "",
-      confirmPassword: "",
-    },
-    validationSchema: SignupSchema,
-    onSubmit: signupApi,
-  });
-
+function SignupForm({
+  values,
+  touched,
+  errors,
+  handleChange,
+  handleBlur,
+  handleSubmit,
+  dirty,
+  isValid
+}) {
   return (
     <div>
       <form onSubmit={handleSubmit} className="flex flex-col">
         <div className="mb-4">
-          <label htmlFor="fullName" className="sr-only">
-            Full Name
-          </label>
-          <input
+          <Input
             id="fullName"
-            placeholder="FULL NAME"
-            value={values.fullName}
-            onChange={handleChange}
-            onBlur={handleBlur}
+            label="Full Name"
             name="fullName"
-            type="text"
+            values={values.fullName}
+            error={errors.fullName}
+            placeholder="FULL NAME"
+            touched={touched.fullName}
+            onChange={handleChange}
+            onBlur={handleBlur}
             required
-            className="border rounded-md border-white text-white p-4 text-sm w-80 bg-transparent placeholder-gray-300"
+            type="text"
           />
-          {touched.fullName && errors.fullName && values.fullName &&(
-            <div className="text-red-300 text-sm mt-1">{errors.fullName}</div>
-          )}
         </div>
 
         <div className="mb-4">
-          <label htmlFor="email" className="sr-only">
-            Email
-          </label>
-          <input
+          <Input
             id="email"
-            placeholder="EMAIL"
-            value={values.email}
-            onChange={handleChange}
-            onBlur={handleBlur}
+            label="Email"
             name="email"
+            values={values.email}
+            error={errors.email}
+            placeholder="EMAIL"
+            touched={touched.email}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            required
             type="email"
-            required
-            className="border rounded-md border-white text-white p-4 text-sm w-80 bg-transparent placeholder-gray-300"
           />
-          {touched.email && errors.email && values.email &&(
-            <div className="text-red-300 text-sm mt-1">{errors.email}</div>
-          )}
         </div>
 
         <div className="mb-4">
-          <label htmlFor="username" className="sr-only">
-            Username
-          </label>
-          <input
+          <Input
             id="username"
-            placeholder="USERNAME"
-            value={values.username}
-            onChange={handleChange}
-            onBlur={handleBlur}
+            label="Username"
             name="username"
+            values={values.username}
+            error={errors.username}
+            placeholder="USERNAME"
+            touched={touched.username}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            required
             type="text"
-            required
-            className="border rounded-md border-white text-white p-4 text-sm w-80 bg-transparent placeholder-gray-300"
           />
-          {touched.username && errors.username && values.username &&(
-            <div className="text-red-300 text-sm mt-1">{errors.username}</div>
-          )}
         </div>
 
         <div className="mb-4">
-          <label htmlFor="password" className="sr-only">
-            Password
-          </label>
-          <input
+          <Input
             id="password"
+            label="Password"
+            name="password"
+            values={values.password}
+            error={errors.password}
             placeholder="PASSWORD"
-            value={values.password}
+            touched={touched.password}
             onChange={handleChange}
             onBlur={handleBlur}
-            name="password"
-            type="password"
             required
-            className="border rounded-md border-white text-white p-4 text-sm w-80 bg-transparent placeholder-gray-300"
+            type="password"
           />
-          {touched.password && errors.password && values.password &&(
-            <div className="text-red-300 text-sm mt-1">{errors.password}</div>
-          )}
         </div>
 
         <div className="mb-4">
-          <label htmlFor="confirmPassword" className="sr-only">
-            Confirm Password
-          </label>
-          <input
+          <Input
             id="confirmPassword"
+            label="Confirm Password"
+            name="confirmPassword"
+            values={values.confirmPassword}
+            error={errors.confirmPassword}
             placeholder="CONFIRM PASSWORD"
-            value={values.confirmPassword}
+            touched={touched.confirmPassword}
             onChange={handleChange}
             onBlur={handleBlur}
-            name="confirmPassword"
-            type="password"
             required
-            className="border rounded-md border-white text-white p-4 text-sm w-80 bg-transparent placeholder-gray-300"
+            type="password"
           />
-          {touched.confirmPassword && errors.confirmPassword && values.confirmPassword &&(
-            <div className="text-red-300 text-sm mt-1">{errors.confirmPassword}</div>
-          )}
         </div>
 
         <div className="mt-4">
@@ -158,8 +135,18 @@ export default function SignupForm() {
       
       <p className="text-white text-center text-lg mt-4">
         Already have an account? 
-        <Link to="/auth/login" className="font-bold"> Login</Link>
+        <Link to="/auth/login" className="font-bold hover:underline"> Login</Link>
       </p>
     </div>
   );
 }
+
+const formikHOC = withFormik({
+  validationSchema: SignupSchema,
+  initialValues: initialValues,
+  handleSubmit: signupApi,
+});
+
+const SignupFormWithFormikHOC = formikHOC(SignupForm);
+
+export default SignupFormWithFormikHOC;

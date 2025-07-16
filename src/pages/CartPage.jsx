@@ -4,7 +4,7 @@ import CartTotal from "../components/CartTotal"
 import { getProductById } from "../api";
 import Loading from "../components/Loading";
 
-export default function CartPage({cart}) {
+export default function CartPage({cart, handleRemovalFromCart, setCart}) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -53,7 +53,7 @@ export default function CartPage({cart}) {
   
   return(
     <div className="flex-grow mx-8 md:mx-16 flex flex-col px-2 py-4 md:p-4">
-      <CartList cartProducts={cartProductsWithQuantity}/>
+      <CartList cartProducts={cartProductsWithQuantity} handleRemovalFromCart={handleRemovalFromCart} cart={cart} setCart={setCart} />
       <CartTotal/>
     </div>
   )

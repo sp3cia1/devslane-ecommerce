@@ -77,6 +77,12 @@ export default function App() {
     setCart({...cart, [productId]: oldCount + count});
   }, [cart]);
 
+  const handleRemovalFromCart = useCallback((productId) => {
+    const newCart = {...cart};
+    delete newCart[productId];
+    setCart(newCart);
+  })
+
   const totalCount = useMemo(() => 
     Object.keys(cart).reduce((prev, current) => {
       return prev + cart[current];
@@ -90,7 +96,7 @@ export default function App() {
        <Routes>
           <Route index element={<ProductList products={sortedProducts} searchProducts={searchProducts} onSort={handleSort} loading={loading} />} />
           <Route path="product/:id" element={<ProductDetail handleAddToCart={handleAddToCart}/>}/>
-          <Route path="cart" element={<CartPage cart={cart}/>}/>
+          <Route path="cart" element={<CartPage cart={cart} handleRemovalFromCart={handleRemovalFromCart} setCart={setCart}/>}/>
           <Route path="auth/:authType" element={<AuthPage/>}/>
        </Routes>
        <Footer/> 

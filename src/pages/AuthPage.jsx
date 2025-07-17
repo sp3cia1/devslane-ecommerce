@@ -3,22 +3,36 @@ import { Link, useParams, Navigate } from "react-router";
 import ForgotPasswordForm from "../components/ForgotPasswordForm";
 import LoginForm from "../components/LoginForm";
 import SignupForm from "../components/SignupForm";
+import { UserContext } from "../App";
+import { useContext } from "react";
 
 export default function AuthPage() {
+  const context = useContext(UserContext);
+  
+  // handle case when context is undefined (during hot reload)
+  if (!context) {
+    return null;
+  }
+  
+  const { user, setUser } = context;
   const { authType } = useParams();
 
   const renderForm = () => {
     switch (authType) {
       case "login":
-        return <LoginForm />;
+        return <LoginForm setUser={setUser}/>;
       case "signup":
-        return <SignupForm />;
+        return <SignupForm setUser={setUser} />;
       case "forgot-password":
         return <ForgotPasswordForm />;
       default:
         return <Navigate to="/auth/login" />;
     }
   };
+
+  if (user) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <div

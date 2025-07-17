@@ -2,18 +2,31 @@ import { withFormik } from "formik";
 import { Link } from "react-router";
 import * as Yup from "yup";
 import Input from "./Input";
+import axios from "axios";
 
-function loginApi(values) {
-  console.log("Sending Data", values.username, values.password);
+
+async function loginApi(values, bag) {
+  console.log(bag)
+  try{
+    const response = await axios.post("https://myeasykart.codeyogi.io/login", {
+      email: values.email,
+      password:values.password
+    })
+    const {user, token} = response.data;
+    localStorage.setItem("token", token);
+    bag.props.setUser(user);
+  } catch(error){
+    console.log("error logging in ", error)
+  }
 }
 
 const LoginSchema = Yup.object().shape({
-  username: Yup.string().min(4).required(),
+  email: Yup.string().email("Invalid email format").required("Email is required"),
   password: Yup.string().min(8).required(),
 });
 
 const initialValues = {
-  username: "",
+  email: "",
   password: "",
 };
 
@@ -32,17 +45,17 @@ function LoginForm({
       <form onSubmit={handleSubmit} className="flex flex-col">
         <div className="mb-4">
           <Input
-            id="username"
-            label="Username"
-            name="username"
-            values={values.username}
-            error={errors.username}
-            placeholder="USERNAME"
-            touched={touched.username}
+            id="email"
+            label="Email"
+            name="email"
+            values={values.email}
+            error={errors.email}
+            placeholder="EMAIL"
+            touched={touched.email}
             onChange={handleChange}
             onBlur={handleBlur}
             required
-            type="text"
+            type="email"
           />
         </div>
         <div className="">

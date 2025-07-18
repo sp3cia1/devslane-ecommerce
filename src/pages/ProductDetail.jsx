@@ -3,8 +3,9 @@ import { FaArrowLeft } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { getProductById } from "../api";
 import Loading from "../components/Loading";
+import { withAlert } from "../hoc";
 
-export default function ProductDetail({handleAddToCart}) {
+function ProductDetail({handleAddToCart, setAlert}) {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -27,6 +28,13 @@ export default function ProductDetail({handleAddToCart}) {
 
     fetchProduct();
   }, [id]);
+
+  const handleAddToCartWithAlert = () => {
+    handleAddToCart(parseInt(id), quantity);
+    if (setAlert) {
+      setAlert(`Added ${quantity} ${product.title}${quantity > 1 ? 's' : ''} to cart!`, 'success');
+    }
+  };
 
   const handleQuantityChange = (event) => {
     const value = parseInt(event.target.value) || 1;
@@ -85,7 +93,7 @@ export default function ProductDetail({handleAddToCart}) {
             onChange={handleQuantityChange}
           />
           <button className="mx-1 rounded bg-primary px-8 py-1 text-white cursor-pointer hover:bg-primary-dark"
-            onClick={() => handleAddToCart(parseInt(id), quantity)}
+            onClick={handleAddToCartWithAlert}
           >
             Add To Cart
           </button>
@@ -112,3 +120,5 @@ export default function ProductDetail({handleAddToCart}) {
     </div>
   )
 }
+
+export default withAlert(ProductDetail);

@@ -1,20 +1,10 @@
-import { Link, useParams, Navigate } from "react-router";
-
+import { useParams, Navigate } from "react-router";
 import ForgotPasswordForm from "../components/ForgotPasswordForm";
 import LoginForm from "../components/LoginForm";
 import SignupForm from "../components/SignupForm";
-import { UserContext } from "../App";
-import { useContext } from "react";
+import { withUser } from "../hoc";
 
-export default function AuthPage() {
-  const context = useContext(UserContext);
-  
-  // handle case when context is undefined (during hot reload)
-  if (!context) {
-    return null;
-  }
-  
-  const { user, setUser } = context;
+function AuthPage({ user, setUser }) {
   const { authType } = useParams();
 
   const renderForm = () => {
@@ -44,3 +34,5 @@ export default function AuthPage() {
     </div>
   );
 }
+
+export default withUser(AuthPage);

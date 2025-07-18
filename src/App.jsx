@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useMemo, useCallback, createContext } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Header from './components/Header'
 import ProductList from './pages/ProductList'
 import Footer from './components/Footer'
+import Alert from './components/Alert'
 
 import { Routes, Route } from "react-router";
 import ProductDetail from "./pages/ProductDetail";
@@ -11,8 +12,8 @@ import { getProducts } from './api';
 import ProtectedRoutes from "./pages/ProtectedRoute";
 import Loading from "./components/Loading";
 import axios from "axios";
-
-export const UserContext = createContext({ user: null, setUser: () => {} });
+import { AlertContext } from './contexts/AlertContext';
+import { UserContext } from './contexts/UserContext';
 
 export default function App() {
 
@@ -25,6 +26,7 @@ export default function App() {
     return savedCart ? JSON.parse(savedCart) : {};
   })
   const [user, setUser] = useState(undefined)
+  const [alert, setAlert] = useState(undefined)
   const [loadingUser, setLoadingUser] = useState(true)
 
   useEffect(()=>{
@@ -42,6 +44,20 @@ export default function App() {
   },[])  
  
   const userData = useMemo(() => ({ user, setUser }), [user, setUser]);
+
+  const removeAlert = useCallback(() => {
+    setAlert(null);
+  }, []);
+
+  const showAlert = useCallback((message, type = 'info') => {
+    setAlert({ message, type });
+  }, []);
+
+  const alertValue = useMemo(() => ({
+    alert,
+    setAlert: showAlert,
+    removeAlert
+  }), [alert, showAlert, removeAlert]);
 
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -118,21 +134,24 @@ export default function App() {
 
   return (
     <div className="bg-[rgb(244,245,246)] flex flex-col min-h-screen">
-      <UserContext.Provider value={userData}>
-        <Header productCount={totalCount}/>
-        <Routes>
-            <Route path="auth/:authType" element={<AuthPage  />}/>
-            <Route path="/*" element={
-              <ProtectedRoutes>
-                <Route index element={<ProductList products={sortedProducts} searchProducts={searchProducts} onSort={handleSort} loading={loading} />} />
-                <Route path="product/:id" element={<ProductDetail handleAddToCart={handleAddToCart} />} />
-                <Route path="cart" element={<CartPage cart={cart} handleRemovalFromCart={handleRemovalFromCart} setCart={setCart} />} />
-              </ProtectedRoutes>
-            }/>
-          </Routes>
-       <Footer/> 
-      </UserContext.Provider>
-       
+      <AlertContext.Provider value={alertValue}>
+        <UserContext.Provider value={userData}>
+          <Header productCount={totalCount}/>
+          <Routes>
+              <Route path="auth/:authType" element={<AuthPage  />}/>
+              <Route path="/*" element={
+                <ProtectedRoutes>
+                  <Route index element={<ProductList products={sortedProducts} searchProducts={searchProducts} onSort={handleSort} loading={loading} />} />
+                  <Route path="product/:id" element={<ProductDetail handleAddToCart={handleAddToCart} />} />
+                  <Route path="cart" element={<CartPage cart={cart} handleRemovalFromCart={handleRemovalFromCart} setCart={setCart} />} />
+                </ProtectedRoutes>
+              }/>
+            </Routes>
+         <Footer/> 
+         
+         <Alert/>
+        </UserContext.Provider>
+      </AlertContext.Provider>
     </div>
   );
 }

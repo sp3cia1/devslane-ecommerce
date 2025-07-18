@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import * as Yup from "yup";
 import Input from "./Input";
 import axios from "axios";
+import { withAlert } from "../hoc";
 
 
 async function loginApi(values, bag) {
@@ -15,8 +16,17 @@ async function loginApi(values, bag) {
     const {user, token} = response.data;
     localStorage.setItem("token", token);
     bag.props.setUser(user);
+
+    if (bag.props.setAlert) {
+      bag.props.setAlert(`Welcome back, ${user.full_name || user.email}!`, 'success');
+    }
   } catch(error){
     console.log("error logging in ", error)
+
+    if (bag.props.setAlert) {
+      const errorMessage = error.response?.data?.message || 'Login failed. Please check your credentials.';
+      bag.props.setAlert(errorMessage, 'danger');
+    }
   }
 }
 
@@ -113,4 +123,4 @@ const formikHOC = withFormik({
 
 const LoginFormWithFormikHOC = formikHOC(LoginForm);
 
-export default LoginFormWithFormikHOC;
+export default withAlert(LoginFormWithFormikHOC);

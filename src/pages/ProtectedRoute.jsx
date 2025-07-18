@@ -1,20 +1,12 @@
-import { useContext } from 'react';
 import { Navigate, Routes } from 'react-router';
-import { UserContext } from '../App';
+import { withUser } from '../hoc';
 
-export default function ProtectedRoutes({ children }) {
-  const context = useContext(UserContext);
-  
-  // handle case when context is undefined (during hot reload)
-  if (!context) {
-    return null; 
-  }
-  
-  const { user } = context;
-  
+function ProtectedRoutes({ children, user }) {
   if (!user) {
     return <Navigate to="/auth/login" replace />;
   }
   
   return <Routes>{children}</Routes>;
 }
+
+export default withUser(ProtectedRoutes);

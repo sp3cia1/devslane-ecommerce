@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo, useCallback, createContext } from "react";
 import Header from './components/Header'
 import ProductList from './pages/ProductList'
 import Footer from './components/Footer'
@@ -8,7 +8,11 @@ import ProductDetail from "./pages/ProductDetail";
 import CartPage from "./pages/CartPage";
 import AuthPage from "./pages/AuthPage";
 import { getProducts } from './api';
+import ProtectedRoutes from "./pages/ProtectedRoute";
+import Loading from "./components/Loading";
+import axios from "axios";
 
+export const UserContext = createContext({ user: null, setUser: () => {} });
 
 export default function App() {
 
@@ -20,6 +24,24 @@ export default function App() {
     const savedCart = localStorage.getItem('cart');
     return savedCart ? JSON.parse(savedCart) : {};
   })
+  const [user, setUser] = useState(undefined)
+  const [loadingUser, setLoadingUser] = useState(true)
+
+  useEffect(()=>{
+    const token = localStorage.getItem("token")
+    if(token){
+      axios.get("https://myeasykart.codeyogi.io/me", {
+        headers: {Authorization:token}
+      }).then((response)=>{
+        setUser(response.data);
+        setLoadingUser(false)
+      })
+    } else{
+      setLoadingUser(false)
+    }
+  },[])  
+ 
+  const userData = useMemo(() => ({ user, setUser }), [user, setUser]);
 
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -81,7 +103,7 @@ export default function App() {
     const newCart = {...cart};
     delete newCart[productId];
     setCart(newCart);
-  })
+  }, [cart]);
 
   const totalCount = useMemo(() => 
     Object.keys(cart).reduce((prev, current) => {
@@ -90,16 +112,28 @@ export default function App() {
     [cart]
   );
 
+  if (loadingUser){
+    return <Loading/>
+  }
+
   return (
     <div className="bg-[rgb(244,245,246)] flex flex-col min-h-screen">
-       <Header productCount={totalCount}/>
-       <Routes>
-          <Route index element={<ProductList products={sortedProducts} searchProducts={searchProducts} onSort={handleSort} loading={loading} />} />
-          <Route path="product/:id" element={<ProductDetail handleAddToCart={handleAddToCart}/>}/>
-          <Route path="cart" element={<CartPage cart={cart} handleRemovalFromCart={handleRemovalFromCart} setCart={setCart}/>}/>
-          <Route path="auth/:authType" element={<AuthPage/>}/>
-       </Routes>
+      <UserContext.Provider value={userData}>
+        <Header productCount={totalCount}/>
+        <Routes>
+            <Route path="auth/:authType" element={<AuthPage  />}/>
+            <Route path="/*" element={
+              <ProtectedRoutes>
+                <Route index element={<ProductList products={sortedProducts} searchProducts={searchProducts} onSort={handleSort} loading={loading} />} />
+                <Route path="product/:id" element={<ProductDetail handleAddToCart={handleAddToCart} />} />
+                <Route path="cart" element={<CartPage cart={cart} handleRemovalFromCart={handleRemovalFromCart} setCart={setCart} />} />
+              </ProtectedRoutes>
+            }/>
+          </Routes>
        <Footer/> 
+      </UserContext.Provider>
+       
     </div>
   );
 }
+

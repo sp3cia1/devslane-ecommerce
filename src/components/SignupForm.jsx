@@ -2,9 +2,24 @@ import { withFormik } from "formik";
 import { Link } from "react-router";
 import * as Yup from "yup";
 import Input from "./Input";
+import axios from "axios";
 
-function signupApi(values) {
-  console.log("Sending Data", values);
+
+async function signupApi(values, bag) {
+  console.log(bag)
+  try{
+    const response = await axios.post("https://myeasykart.codeyogi.io/signup", {
+      fullName: values.fullName,
+      email:values.email,
+      password:values.password
+    })
+    const {user, token} = response.data;
+    localStorage.setItem("token", token);
+    bag.props.setUser(user);
+    console.log(response)
+  } catch (error) {
+    console.error('Error Sign up ', error);
+  }
 }
 
 const SignupSchema = Yup.object().shape({

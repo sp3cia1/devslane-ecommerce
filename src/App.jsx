@@ -10,10 +10,10 @@ import CartPage from "./pages/CartPage";
 import AuthPage from "./pages/AuthPage";
 import { getProducts } from './api';
 import ProtectedRoutes from "./pages/ProtectedRoute";
-import Loading from "./components/Loading";
 import axios from "axios";
 import { AlertContext } from './contexts/AlertContext';
-import { UserContext } from './contexts/UserContext';
+import UserProvider from "./providers/UserProvider";
+import AlertProvider from "./providers/AlertProvider";
 
 export default function App() {
 
@@ -25,39 +25,6 @@ export default function App() {
     const savedCart = localStorage.getItem('cart');
     return savedCart ? JSON.parse(savedCart) : {};
   })
-  const [user, setUser] = useState(undefined)
-  const [alert, setAlert] = useState(undefined)
-  const [loadingUser, setLoadingUser] = useState(true)
-
-  useEffect(()=>{
-    const token = localStorage.getItem("token")
-    if(token){
-      axios.get("https://myeasykart.codeyogi.io/me", {
-        headers: {Authorization:token}
-      }).then((response)=>{
-        setUser(response.data);
-        setLoadingUser(false)
-      })
-    } else{
-      setLoadingUser(false)
-    }
-  },[])  
- 
-  const userData = useMemo(() => ({ user, setUser }), [user, setUser]);
-
-  const removeAlert = useCallback(() => {
-    setAlert(null);
-  }, []);
-
-  const showAlert = useCallback((message, type = 'info') => {
-    setAlert({ message, type });
-  }, []);
-
-  const alertValue = useMemo(() => ({
-    alert,
-    setAlert: showAlert,
-    removeAlert
-  }), [alert, showAlert, removeAlert]);
 
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -68,7 +35,7 @@ export default function App() {
       try {
         setLoading(true)
         const data = await getProducts()
-        setProducts(data.products)
+        setProducts(data.data)
       } catch (error) {
         console.error('Failed to fetch products:', error)
       } finally {
@@ -128,16 +95,13 @@ export default function App() {
     [cart]
   );
 
-  if (loadingUser){
-    return <Loading/>
-  }
 
   return (
     <div className="bg-[rgb(244,245,246)] flex flex-col min-h-screen">
-      <AlertContext.Provider value={alertValue}>
-        <UserContext.Provider value={userData}>
+      <UserProvider>
+        <AlertProvider>
           <Header productCount={totalCount}/>
-          <Routes>
+            <Routes>
               <Route path="auth/:authType" element={<AuthPage  />}/>
               <Route path="/*" element={
                 <ProtectedRoutes>
@@ -148,10 +112,10 @@ export default function App() {
               }/>
             </Routes>
          <Footer/> 
-         
          <Alert/>
-        </UserContext.Provider>
-      </AlertContext.Provider>
+        </AlertProvider>
+      </UserProvider>
+      
     </div>
   );
 }

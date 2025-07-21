@@ -13,9 +13,6 @@ function logout(setUser, setAlert){
 }
 
 function Header({productCount, setAlert, user, setUser}){
-  if (!user) {
-    return null;
-  }
   
   return(
     <div className="h-20 bg-white md:px-32 px-16 flex items-center justify-between shadow-sm">
@@ -25,7 +22,7 @@ function Header({productCount, setAlert, user, setUser}){
              alt="Amazon Logo"
         />
       </Link>
-      <div className="flex gap-8 md:gap-16">
+      {user && <div className="flex gap-8 md:gap-16">
         <Link to="/cart" className="text-primary hover:text-blue-600 transition-colors relative">
           <FaShoppingCart className="md:text-4xl text-2xl" />
           {productCount > 0 && (
@@ -35,7 +32,7 @@ function Header({productCount, setAlert, user, setUser}){
           )}
         </Link>
         <IoLogOutOutline onClick={() => logout(setUser, setAlert)} className="md:text-4xl text-2xl text-primary cursor-pointer"/>
-      </div>
+      </div>}
     </div>
   )
 }
